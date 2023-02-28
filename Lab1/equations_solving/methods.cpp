@@ -43,13 +43,12 @@ vector<double> iterations(double x,
     vector<double> all_x;
 
     double x_previos;
-    // double alpha = 2 / (find_M(a, b, 1000, abs_df) + find_m(a, b, 1000, abs_df));
     double m = find_m(a, b, 1000, df);
     double M = find_M(a, b, 1000, df);
     double alpha = 1 / ((abs(m) > abs(M)) ? m : M);
     double q = find_M(a, b, 1000, alpha, df, dfi);
 
-    double gamma = (q > 0.5) ? (1 - q) / q : 1;
+    double gamma = (q > 0.5) ? (1 - q) / q * eps : eps;
 
     do {
         all_x.push_back(x);
@@ -60,7 +59,7 @@ vector<double> iterations(double x,
             return all_x;
         }
 
-    } while (abs(x - x_previos) > gamma*eps);
+    } while (abs(x - x_previos) > gamma);
 
     return all_x;
 }
@@ -82,13 +81,10 @@ vector<double> chords(double x,
         all_x.push_back(x);
         x_previos = x;
 
-        a = a - (b - a) * f(a) / (f(b) - f(a));
-        b = b - (a - b) * f(b) / (f(a) - f(b));
-
         if (f(b)*d2f(b) > 0)
             x = x - f(x) * (b - x) / (f(b) - f(x));
         else
-            x = a - f(a) * (x - a) / (f(a) - f(x));
+            x = x - f(x) * (x - a) / (f(x) - f(a));
         
         if (all_x.size() > 100) {
             return all_x;
@@ -107,7 +103,7 @@ vector<pair<double, double>> iterations_system(double x,
                   double (*fi2)(double, double)) {
 
     vector<pair<double, double>> all_x_y;
-    int x_previos, y_previos;
+    double x_previos, y_previos;
 
     do {
         all_x_y.push_back(make_pair(x, y));
@@ -115,8 +111,14 @@ vector<pair<double, double>> iterations_system(double x,
         y_previos = y;
         x = fi1(x, y);
         y = fi2(x, y);
+
+
+        if (all_x_y.size() > 100) {
+            return all_x_y;
+        }
+
     } while (abs(x - x_previos) > eps
-             && abs(y - y_previos) > eps);
+             || abs(y - y_previos) > eps);
              
     return all_x_y;
 }

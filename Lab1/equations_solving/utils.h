@@ -1,3 +1,4 @@
+
 #ifndef UTILS_H
 #define UTILS_H
 
@@ -22,5 +23,7 @@ double find_M(double a,
 vector<pair<double, double>> get_intervals(double a, double b, double (*f)(double));
 
 bool to_file(vector<double> vect, string f_name);
+
+bool to_file(vector<pair<double, double>> vect, string f_name);
 
 #endif
