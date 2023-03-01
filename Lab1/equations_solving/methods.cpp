@@ -75,6 +75,7 @@ vector<double> chords(double x,
     vector<double> all_x;
 
     double x_previos;
+    bool flag;
 
     do {
 
@@ -82,6 +83,8 @@ vector<double> chords(double x,
         x_previos = x;
 
         if (f(b)*d2f(b) > 0)
+             flag = true;
+        if (flag)
             x = x - f(x) * (b - x) / (f(b) - f(x));
         else
             x = x - f(x) * (x - a) / (f(x) - f(a));
