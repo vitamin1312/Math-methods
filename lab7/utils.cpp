@@ -35,9 +35,11 @@ void fill_values(std::vector<double> &x, std::vector<double> &y, double (*f)(dou
 }
 
 double absolute_error(double pred, double targ) {
-    return abs(pred - targ);
+    double e = pred - targ;
+    return  (e > 0) ? e:(-1*e);
 }
 
 double relative_error(double pred, double targ) {
-    return abs(pred - targ) / targ * 100;
+    double e = (pred - targ) / targ * 100.;
+    return (e > 0) ? e:(-1*e);
 }
